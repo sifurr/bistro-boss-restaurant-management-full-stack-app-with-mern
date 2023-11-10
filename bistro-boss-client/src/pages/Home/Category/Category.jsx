@@ -1,10 +1,10 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import required modules
 import { Pagination } from 'swiper/modules';
-
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
+import './Category.css'
 
 import slide1 from '../../../assets/home/slide1.jpg'
 import slide2 from '../../../assets/home/slide2.jpg'
@@ -32,7 +32,7 @@ const Category = () => {
             pagination={{
                 clickable: true,
             }}
-            modules={[Pagination]}
+            modules={[Pagination]}            
             className="mySwiper mb-24"
         >
             <SwiperSlide>
