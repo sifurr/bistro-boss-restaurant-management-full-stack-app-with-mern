@@ -1,0 +1,6 @@
+.about-bg{
+    background-image: url('../../../assets/home/chef-service.jpg');
+    background-size: cover;
+    height: 520px;
+    background-repeat: no-repeat;
+}

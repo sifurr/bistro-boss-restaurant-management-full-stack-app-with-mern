@@ -1,19 +1,12 @@
-
-
+import { BiSolidUserCircle } from 'react-icons/bi';
+import {Link} from 'react-router-dom'
 const Navbar = () => {
     const navOptions =
         <>
-            <li><a>Item 1 22255</a></li>
-            <li tabIndex={0}>
-                <details>
-                    <summary>Parent</summary>
-                    <ul className="p-2">
-                        <li><a>Submenu 1</a></li>
-                        <li><a>Submenu 2</a></li>
-                    </ul>
-                </details>
+            <li>
+                <Link to="/" >Home</Link>   
             </li>
-            <li><a>Item 3</a></li>
+            <li><Link to="/menu">Menu</Link></li>
         </>
 
 
@@ -36,7 +29,9 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <a className="btn">Button</a>
+                
+
+                <a className="cursor-pointer"><span className='text-4xl'><BiSolidUserCircle/> </span></a>
             </div>
         </div>
     );
