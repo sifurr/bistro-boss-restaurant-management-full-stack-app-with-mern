@@ -4,37 +4,50 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { useForm } from "react-hook-form"
 import { Helmet } from 'react-helmet-async'
 import Swal from 'sweetalert2'
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 
 const SignUp = () => {
-    const { register, handleSubmit,reset, formState: { errors } } = useForm()
+    const { register, handleSubmit, reset, formState: { errors } } = useForm()
     const { createUser, updateNewUserProfile, setLoading } = useContext(AuthContext);
     const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic()
 
     const onSubmit = (data) => {
         console.log(data);
 
         createUser(data.email, data.password)
-            .then(res => {                
+            .then(res => {
                 const loggedInUser = res.user;
 
                 setLoading(true)
                 updateNewUserProfile(data.name, data.photoURL)
-                .then(() => {
-                    console.log("user profile updated")
-                    reset();
-                    Swal.fire({
-                        title: "Signed up successfully!",
-                        text: "",
-                        icon: "success"
-                    });
-                    setLoading(false)
-                    navigate('/')
-                })
-                .catch(err => console.log(err))
+                    .then(() => {
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email
+                        }
+                        axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                console.log("user added to the database");
+                                if (res.data.insertedId) {
+                                    // console.log("user profile updated")
+                                    reset();
+                                    Swal.fire({
+                                        title: "Signed up successfully!",
+                                        text: "",
+                                        icon: "success"
+                                    });
+                                    setLoading(false)
+                                    navigate('/')
+                                }
+                            })
+                    })
+                    .catch(err => console.log(err))
 
                 console.log("logged in User: ", loggedInUser);
-                
+
             })
             .catch(err => {
                 console.log(err.message);
@@ -104,7 +117,10 @@ const SignUp = () => {
                                 <input type="submit" className="btn btn-primary" value="Sign-up" />
                             </div>
                         </form>
-                        <p className='text-center mb-5'><small>Already registered? <Link className='font-bold' to="/login">Login</Link>  </small></p>
+                        <p className='text-center mb-2'><small>Already registered? <Link className='font-bold' to="/login">Login</Link>  </small></p>
+                        <div className="flex justify-center mb-5">
+                            <SocialLogin></SocialLogin>
+                        </div>
                     </div>
                 </div>
             </div>
