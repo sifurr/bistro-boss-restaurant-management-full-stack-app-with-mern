@@ -18,7 +18,7 @@ const Login = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const from = location?.state?.from?.pathname || '/'
-    console.log("visited location before login: ", location.state)
+    // console.log("visited location before login: ", location.state)
 
     useEffect(() => {
         loadCaptchaEnginge(6);
@@ -29,7 +29,7 @@ const Login = () => {
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email, password)
+        // console.log(email, password);
 
         signIn(email, password)
             .then(res => {
@@ -40,12 +40,12 @@ const Login = () => {
                     icon: "success"
                 });
                 const user = res.user;
-                console.log("user: ", user);
+                // console.log("user: ", user);
                 
                 navigate(from, {replace:true})
             })
             .catch(err => {
-                console.log(err.message)
+                // console.log(err.message)
             })
     }
 

@@ -15,7 +15,7 @@ const SignUp = () => {
     const axiosPublic = useAxiosPublic()
 
     const onSubmit = (data) => {
-        console.log(data);
+        // console.log(data);
 
         createUser(data.email, data.password)
             .then(res => {
@@ -44,13 +44,15 @@ const SignUp = () => {
                                 }
                             })
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => {
+                        // console.log(err)
+                    })
 
-                console.log("logged in User: ", loggedInUser);
+                // console.log("logged in User: ", loggedInUser);
 
             })
             .catch(err => {
-                console.log(err.message);
+                // console.log(err.message);
             })
     }
 
