@@ -113,7 +113,9 @@ const AddItems = () => {
                     <div>
                         <input {...register("image", { required: true })}
                             type="file"
-                            className="file-input w-full max-w-xs" />
+                            className="file-input file:bg-orange-600 text-white bg-black  font-bold  w-full max-w-xs"
+                            style={{input:{'background-color': 'red'}}}
+                            />
                     </div>
                     <br />
                     <button className="btn">Add Item <FaUtensils /></button>

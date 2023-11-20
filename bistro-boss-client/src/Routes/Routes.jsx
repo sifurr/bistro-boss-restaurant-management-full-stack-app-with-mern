@@ -14,6 +14,7 @@ import AddItems from "../pages/Dashboard/AddItems/AddItems";
 import AdminRoute from "./AdminRoute";
 import ManageItems from "../pages/Dashboard/ManageItems/ManageItems";
 import UpdateItem from "../pages/Dashboard/UpdateItem/UpdateItem";
+import Payment from "../pages/Dashboard/Payment/Payment";
 
 
 
@@ -57,6 +58,12 @@ export const router = createBrowserRouter([
                 path: 'cart',
                 element: <Cart></Cart>
             },
+            {
+                // normal user routes
+                path: 'payment',
+                element: <Payment></Payment>
+            },
+
             // admin only routes
             {
                 path: 'add-items',
@@ -69,7 +76,8 @@ export const router = createBrowserRouter([
             {
                 path: 'update-item/:id',
                 element: <AdminRoute> <UpdateItem></UpdateItem> </AdminRoute>,
-                loader: ({params}) => fetch(`https://bistro-boss-server-sandy-alpha.vercel.app/menu/${params.id}`)
+                loader: ({params}) => fetch(`http://localhost:5000/menu/${params.id}`)
+                // loader: ({params}) => fetch(`https://bistro-boss-server-sandy-alpha.vercel.app/menu/${params.id}`)
             },
             {
                 path: 'users',
