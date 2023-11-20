@@ -5,12 +5,12 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const app = express();
 const port = process.env.PORT || 5000;
-
+const stripe = require("stripe")(process.env.PAYMENT_GATEWAY_SECRET);
 
 // middlewares
 app.use(
   cors({
-    origin: ["https://655a2013551d443eecb7ca53--glittering-liger-e9e171.netlify.app", "http://localhost:5173", "http://localhost:5173"],
+    origin: ["https://655a2013551d443eecb7ca53--glittering-liger-e9e171.netlify.app", "http://localhost:5173", "http://localhost:5174"],
     credentials: true,
   })
 );
@@ -58,6 +58,7 @@ async function run() {
     const menuCollection = client.db("bistroBossDB").collection("menu");
     const reviewCollection = client.db("bistroBossDB").collection("reviews");
     const cartCollection = client.db("bistroBossDB").collection("carts");
+    const paymentCollection = client.db("bistroBossDB").collection("payments");
 
     // a middleware
     // use verifyAdmin after verifyToken
@@ -201,11 +202,38 @@ async function run() {
 
     app.delete("/carts/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id);
+      // console.log(id);
       const query = { _id: new ObjectId(id) };
       const result = await cartCollection.deleteOne(query);
       res.send(result);
     });
+
+    // payment related api
+    // payment intent
+    app.post("/create-payment-intent", async (req, res) => {
+      const {price} = req.body;
+      const amount = parseInt(price * 100);
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: 'usd',
+        payment_method_types: ['card']
+      })
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+      })
+    })
+
+    app.post("/payments", async (req, res)=>{
+      const payment = req.body;
+      const paymentResult = await paymentCollection.insertOne(payment);
+      // console.log("Payment info: ",payment);
+      // delete each item from the cart
+      const query = {
+        _id: {$in: payment.cartIds.map(id => new ObjectId(id))}
+      }
+      const deleteResult = await cartCollection.deleteMany(query);
+      res.send({paymentResult, deleteResult});
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
