@@ -55,6 +55,7 @@ const AuthProvider = ({children}) => {
                     if(res.data.token)
                     {
                         localStorage.setItem('access-token', res.data.token);
+                        setLoading(false);
                     }
                 })
             }
@@ -62,9 +63,10 @@ const AuthProvider = ({children}) => {
             {
                 // TODO: remove token (if token is stored in the client side like local storage, in-memory, caching)
                 localStorage.removeItem('access-token')
+                setLoading(false);
             }
             // console.log("Current user: ",currentUser);
-            setLoading(false);
+            
         })
         return ()=>{
             return unSubscribe();
